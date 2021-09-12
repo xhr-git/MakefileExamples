@@ -46,3 +46,51 @@ xhr@ubuntu:~/MakefileExamples/automatic$ make clean
 xhr@ubuntu:~/MakefileExamples/automatic$ ls
 foo  include  main.c  Makefile  src
 ```
+
+## Recursive Folder
+
+**Features:**
+
+- Use method similar to linux kernel.
+- You need to add sub-makefiles(`BUILD.mk`) under each source file directory to determine which directories or source files need to be compiled.
+- Only compile files that have been modified.
+
+**How to use:**
+
+Only describe the differences from `Automatic Folder`.
+
+- There is no `BUILD_SRC`, need to use the `BUILD.mk` to specify compilation of contents.
+- `INCLUDES` - Do not use relative paths, use `ROOT_DIR` as a prefix.
+
+**Test:**
+
+```txt
+xhr@ubuntu:~/MakefileExamples$ cd recursive/
+xhr@ubuntu:~/MakefileExamples/recursive$ make
+    CC  ./main.o
+    CC  foo/bar/deep/deeper/deep.o
+    CC  foo/bar/proc.o
+    LD  foo/bar/_built-in.a
+    CC  foo/bar/deep/deep.o
+    LD  foo/bar/deep/_built-in.a
+    LD  foo/_built-in.a
+    CC  src/good.o
+    LD  src/_built-in.a
+    LD  ./_built-in.a
+    LD  test.exe
+
+>>>  successful !!
+
+xhr@ubuntu:~/MakefileExamples/recursive$ ./test.exe
+hello main: GOOD GOOD
+thread_task
+print_good: GOOD GOOD
+The more deeper file depth.
+You can see the sub-makefile example in `foo/BUILD.mk`.
+AUTHOR: xhr
+xhr@ubuntu:~/MakefileExamples/recursive$ ls
+_build  BUILD.mk  foo  include  main.c  Makefile  src  test.exe
+xhr@ubuntu:~/MakefileExamples/recursive$ make clean
+xhr@ubuntu:~/MakefileExamples/recursive$ ls
+BUILD.mk  foo  include  main.c  Makefile  src
+```

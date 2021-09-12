@@ -1,0 +1,2 @@
+
+obj-y += proc.o
